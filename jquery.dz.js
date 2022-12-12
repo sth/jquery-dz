@@ -45,13 +45,6 @@
 // enough that all such attempts are guarded in a try block.
 "use strict";
 
-// UglifyJS minifies `typeof n.getElementsByTagName === "undefined"` to `n.getElementsByTagName === undefined`.
-// While this should work, it doesn't in IE with XML ActiveX objects. They raise an exception when accessing
-// `n.getElementsByTagName`. So we complicate the undefined check so that UglifyJS doesn't minify it anymore
-// by using the following variable:
-var _sundefined = ["undefined"];
-var sundefined = _sundefined[0];
-
 function setText( node, val ) {
 	if ( typeof node.textContent === "string" ) {
 		node.textContent = val;
@@ -1122,7 +1115,7 @@ function createPositionalPseudo( fn ) {
  * @returns {Element|Object|Boolean} The input node if acceptable, otherwise a falsy value
  */
 function testContext( context ) {
-	return context && typeof context.getElementsByTagName !== sundefined && context;
+	return context && typeof context.getElementsByTagName !== "undefined" && context;
 }
 
 // Expose support vars for convenience
@@ -1237,7 +1230,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 			};
 		};
 		Expr.find[ "ID" ] = function( id, context ) {
-			if ( typeof context.getElementById !== sundefined && documentIsHTML ) {
+			if ( typeof context.getElementById !== "undefined" && documentIsHTML ) {
 				var elem = context.getElementById( id );
 				return elem ? [ elem ] : [];
 			}
@@ -1246,7 +1239,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 		Expr.filter[ "ID" ] =  function( id ) {
 			var attrId = id.replace( runescape, funescape );
 			return function( elem ) {
-				var node = typeof elem.getAttributeNode !== sundefined &&
+				var node = typeof elem.getAttributeNode !== "undefined" &&
 					elem.getAttributeNode( "id" );
 				return node && node.value === attrId;
 			};
@@ -1255,7 +1248,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 		// Support: IE 6 - 7 only
 		// getElementById is not reliable as a find shortcut
 		Expr.find[ "ID" ] = function( id, context ) {
-			if ( typeof context.getElementById !== sundefined && documentIsHTML ) {
+			if ( typeof context.getElementById !== "undefined" && documentIsHTML ) {
 				var node, i, elems,
 					elem = context.getElementById( id );
 
@@ -1286,7 +1279,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 	// Tag
 	Expr.find[ "TAG" ] = support.getElementsByTagName ?
 		function( tag, context ) {
-			if ( typeof context.getElementsByTagName !== sundefined ) {
+			if ( typeof context.getElementsByTagName !== "undefined" ) {
 				return context.getElementsByTagName( tag );
 
 			// DocumentFragment nodes don't have gEBTN
@@ -1318,7 +1311,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 
 	// Class
 	Expr.find[ "CLASS" ] = support.getElementsByClassName && function( className, context ) {
-		if ( typeof context.getElementsByClassName !== sundefined && documentIsHTML ) {
+		if ( typeof context.getElementsByClassName !== "undefined" && documentIsHTML ) {
 			return context.getElementsByClassName( className );
 		}
 	};
@@ -1902,7 +1895,7 @@ Expr = Sizzle.selectors = {
 						className, function( elem ) {
 							return pattern.test(
 								typeof elem.className === "string" && elem.className ||
-								typeof elem.getAttribute !== sundefined &&
+								typeof elem.getAttribute !== "undefined" &&
 									elem.getAttribute( "class" ) ||
 								""
 							);
@@ -4992,10 +4985,10 @@ function getAll( context, tag ) {
 	// Use typeof to avoid zero-argument method invocation on host objects (trac-15151)
 	var ret;
 
-	if ( typeof context.getElementsByTagName !== sundefined ) {
+	if ( typeof context.getElementsByTagName !== "undefined" ) {
 		ret = context.getElementsByTagName( tag || "*" );
 
-	} else if ( typeof context.querySelectorAll !== sundefined ) {
+	} else if ( typeof context.querySelectorAll !== "undefined" ) {
 		ret = context.querySelectorAll( tag || "*" );
 
 	} else {
@@ -8062,7 +8055,7 @@ jQuery.extend( {
 		}
 
 		// Fallback to prop when attributes are not supported
-		if ( typeof elem.getAttribute === sundefined ) {
+		if ( typeof elem.getAttribute === "undefined" ) {
 			return jQuery.prop( elem, name, value );
 		}
 
